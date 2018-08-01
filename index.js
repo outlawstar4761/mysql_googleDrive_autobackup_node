@@ -1,5 +1,5 @@
 const google = require('./googleModule');
-const { exec } = require('child_process');
+const {exec} = require('child_process');
 const DBFILE = 'databases.json';
 const PASSPHRASE = '1234';
 
