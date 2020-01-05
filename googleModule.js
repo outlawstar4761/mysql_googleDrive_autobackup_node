@@ -3,6 +3,7 @@ var googleModule = (function(){
     const readline = require('readline');
     const {google} = require('googleapis');
     const mime = require('mime-types');
+    const pathinfo = require('pathinfo');
     const SCOPES = [
         'https://www.googleapis.com/auth/userinfo.profile',
         'https://www.googleapis.com/auth/drive',
@@ -56,6 +57,7 @@ var googleModule = (function(){
         },
         uploadFile:async function(auth,filePath,fileMetaData){
             const drive = google.drive({version:'v3',auth});
+            var fileInfo = pathinfo(outputFile);
             var media = {mimeType:mime.lookup(fileInfo.extname),body:fs.createReadStream(filePath)}
             const res = await drive.files.create({resource:fileMetaData,media:media});
         }
