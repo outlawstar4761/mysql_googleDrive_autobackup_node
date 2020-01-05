@@ -57,7 +57,7 @@ var googleModule = (function(){
         },
         uploadFile:async function(auth,filePath,fileMetaData){
             const drive = google.drive({version:'v3',auth});
-            var fileInfo = pathinfo(outputFile);
+            var fileInfo = pathinfo(filePath);
             var media = {mimeType:mime.lookup(fileInfo.extname),body:fs.createReadStream(filePath)}
             const res = await drive.files.create({resource:fileMetaData,media:media});
         }
