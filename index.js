@@ -39,10 +39,11 @@ fs.readFile(google.CRED_PATH,(err,content)=>{
     // },(err)=>{
     //     return console.log('Error Reading Databases:',err);
     // });
+    var parentFolders = ['backup','mysql','Databases'];
     google.authorize(JSON.parse(content),(auth)=>{google.getFileList(auth).then((files)=>{
       files.forEach((file)=>{
-        if(file.mimeType == 'application/vnd.google-apps.folder'){
-          console.log(file);
+        if(file.mimeType == 'application/vnd.google-apps.folder' && parentFolders.indexOf(file.name) !== -1){
+          console.log(file.id);
         }
       });
     },console.error);});
