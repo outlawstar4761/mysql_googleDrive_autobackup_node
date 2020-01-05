@@ -26,7 +26,7 @@ function getDatabases(){
 }
 function parseExistingBackups(fileList){
   let ids = [];
-  files.forEach((file)=>{
+  fileList.forEach((file)=>{
     if(file.name.match(/.sql.gpg/)){
       ids.push(file.id);
     }
@@ -52,7 +52,7 @@ google.authorize(secret,(auth)=>{
       google.uploadFile(auth,outputFile,fileMetaData).catch(console.error)
     }).catch(console.error);
   });
-}).catch(console.error);
+});
 
 // fs.readFile(google.CRED_PATH,(err,content)=>{
 //     if (err) return console.log('Error loading client secret file:',err);
