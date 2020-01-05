@@ -15,15 +15,6 @@ function execBackUpScript(database,passphrase){
     });
   });
 }
-
-function getDatabases(){
-  return new Promise((resolve,reject)=>{
-    fs.readFile(DBFILE,(err,content)=>{
-      if (err) reject(err);
-      resolve(JSON.parse(content));
-    });
-  });
-}
 function parseExistingBackups(fileList){
   let ids = [];
   fileList.forEach((file)=>{
@@ -53,22 +44,3 @@ google.authorize(secret,(auth)=>{
     }).catch(console.error);
   });
 });
-
-// fs.readFile(google.CRED_PATH,(err,content)=>{
-//     if (err) return console.log('Error loading client secret file:',err);
-//     getDatabases().then((databases)=>{
-//         databases.forEach((database)=>{
-//             execBackUpScript(database,PASSPHRASE).then((outputFile)=>{
-//                 var parentFolders = ['1BWiXZKWmbidk2RbQVecL8du6Ma2RigtZ'];
-//                 var fileMetaData = {name:outputFile,parents:parentFolders};
-//                 google.authorize(JSON.parse(content),(auth)=>{google.uploadFile(auth,outputFile,fileMetaData).catch(console.error)});
-//             },(err)=>{
-//                 return console.log('Error Executing Backup:',err);
-//             });
-//         });
-//     },(err)=>{
-//         return console.log('Error Reading Databases:',err);
-//     });
-//     //google.authorize(JSON.parse(content),(auth)=>{google.getFileList(auth).then(console.log,console.error);});
-//     //google.authorize(JSON.parse(content),(auth)=>{google.uploadFile(auth,'testFile.png').catch(console.error)});
-// });
