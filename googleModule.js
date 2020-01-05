@@ -55,6 +55,11 @@ var googleModule = (function(){
                 });
             });
         },
+        deleteFile:async function(auth,fileId){
+            const drive = google.drive({version:'v3',auth});
+            const res = await drive.files.delete(fileId);
+            return res;
+        },
         uploadFile:async function(auth,filePath,fileMetaData){
             const drive = google.drive({version:'v3',auth});
             var fileInfo = pathinfo(filePath);
