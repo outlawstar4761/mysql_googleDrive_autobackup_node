@@ -25,7 +25,7 @@ function parseExistingBackups(fileList){
   return ids;
 }
 function pruneOldBackUps(auth){
-  google.getFileList(auth).then((fileList)=>{
+  google.getFileList(auth,{}).then((fileList)=>{
     let backupIds = parseExistingBackups(fileList);
     backupIds.forEach((id)=>{
       google.deleteFile(auth,id);

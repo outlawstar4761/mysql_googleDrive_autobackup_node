@@ -42,12 +42,11 @@ var googleModule = (function(){
         authorize:function(credentials,callback){
             authorize(credentials,callback);
         },
-        getFileList:function(auth){
+        getFileList:function(auth,options){
             return new Promise((resolve,reject)=>{
                 var fileList = [];
                 const drive = google.drive({version:'v3',auth});
-                // {pageSize:10,fields:'nextPageToken,files(id,name)'}
-                drive.files.list({},(err,res)=>{
+                drive.files.list(options,(err,res)=>{
                     if(err) reject(err);
                     const files = res.data.files;
                     files.forEach((file)=>{fileList.push(file);});
