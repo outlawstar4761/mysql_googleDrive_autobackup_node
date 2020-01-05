@@ -2,6 +2,7 @@ const google = require('./googleModule');
 const {exec} = require('child_process');
 const DBFILE = 'databases.json';
 const PASSPHRASE = '1234';
+var parentFolders = ['1BWiXZKWmbidk2RbQVecL8du6Ma2RigtZ'];
 
 
 function execBackUpScript(database,passphrase){
@@ -41,26 +42,33 @@ function pruneOldBackUps(auth){
   },console.error);
 }
 
-// let secret = JSON.parse(fs.readFileSync(google.CRED_PATH));
-// google.authorize(secret,(auth)=>{
-//   pruneOldBackUps(auth);
-// });
+let secret = JSON.parse(fs.readFileSync(google.CRED_PATH));
+let databases = JSON.parse(fs.readFileSync(DBFILE));
+google.authorize(secret,(auth)=>{
+  pruneOldBackUps(auth);
+  databases.forEach((database)=>{
+    execBackUpScript(database,PASSPHRASE).then((outputFile)=>{
+      var fileMetaData = {name:outputFile,parents:parentFolders};
+      google.uploadFile(auth,outputFile,fileMetaData).catch(console.error)
+    }).catch(console.error);
+  });
+}).catch(console.error);
 
-fs.readFile(google.CRED_PATH,(err,content)=>{
-    if (err) return console.log('Error loading client secret file:',err);
-    getDatabases().then((databases)=>{
-        databases.forEach((database)=>{
-            execBackUpScript(database,PASSPHRASE).then((outputFile)=>{
-                var parentFolders = ['1BWiXZKWmbidk2RbQVecL8du6Ma2RigtZ'];
-                var fileMetaData = {name:outputFile,parents:parentFolders};
-                google.authorize(JSON.parse(content),(auth)=>{google.uploadFile(auth,outputFile,fileMetaData).catch(console.error)});
-            },(err)=>{
-                return console.log('Error Executing Backup:',err);
-            });
-        });
-    },(err)=>{
-        return console.log('Error Reading Databases:',err);
-    });
-    //google.authorize(JSON.parse(content),(auth)=>{google.getFileList(auth).then(console.log,console.error);});
-    //google.authorize(JSON.parse(content),(auth)=>{google.uploadFile(auth,'testFile.png').catch(console.error)});
-});
+// fs.readFile(google.CRED_PATH,(err,content)=>{
+//     if (err) return console.log('Error loading client secret file:',err);
+//     getDatabases().then((databases)=>{
+//         databases.forEach((database)=>{
+//             execBackUpScript(database,PASSPHRASE).then((outputFile)=>{
+//                 var parentFolders = ['1BWiXZKWmbidk2RbQVecL8du6Ma2RigtZ'];
+//                 var fileMetaData = {name:outputFile,parents:parentFolders};
+//                 google.authorize(JSON.parse(content),(auth)=>{google.uploadFile(auth,outputFile,fileMetaData).catch(console.error)});
+//             },(err)=>{
+//                 return console.log('Error Executing Backup:',err);
+//             });
+//         });
+//     },(err)=>{
+//         return console.log('Error Reading Databases:',err);
+//     });
+//     //google.authorize(JSON.parse(content),(auth)=>{google.getFileList(auth).then(console.log,console.error);});
+//     //google.authorize(JSON.parse(content),(auth)=>{google.uploadFile(auth,'testFile.png').catch(console.error)});
+// });
