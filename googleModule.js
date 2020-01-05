@@ -46,7 +46,8 @@ var googleModule = (function(){
             return new Promise((resolve,reject)=>{
                 var fileList = [];
                 const drive = google.drive({version:'v3',auth});
-                drive.files.list({pageSize:10,fields:'nextPageToken,files(id,name)'},(err,res)=>{
+                // {pageSize:10,fields:'nextPageToken,files(id,name)'}
+                drive.files.list({},(err,res)=>{
                     if(err) reject(err);
                     const files = res.data.files;
                     files.forEach((file)=>{fileList.push(file);});
@@ -54,10 +55,8 @@ var googleModule = (function(){
                 });
             });
         },
-        uploadFile:async function(auth,filePath){
+        uploadFile:async function(auth,filePath,fileMetaData){
             const drive = google.drive({version:'v3',auth});
-            var fileInfo = pathinfo(filePath);
-            var fileMetaData = {name:fileInfo.filename};
             var media = {mimeType:mime.lookup(fileInfo.extname),body:fs.createReadStream(filePath)}
             const res = await drive.files.create({resource:fileMetaData,media:media});
         }
