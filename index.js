@@ -40,7 +40,7 @@ google.authorize(secret,(auth)=>{
     backupIds.forEach((id)=>{
       google.deleteFile(auth,id);
     });
-  },console.error);}
+  },console.error);
 });
 
 // fs.readFile(google.CRED_PATH,(err,content)=>{
