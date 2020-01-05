@@ -29,8 +29,8 @@ fs.readFile(google.CRED_PATH,(err,content)=>{
     getDatabases().then((databases)=>{
         databases.forEach((database)=>{
             execBackUpScript(database,PASSPHRASE).then((outputFile)=>{
-                var fileMetaData = {name:outputFile,parents:parentFolders};
                 var parentFolders = ['1BWiXZKWmbidk2RbQVecL8du6Ma2RigtZ','13YNO4-gpZk8MW-rIZbCqFa2zLohzbD-s','1oDOv1m3Crv7CVuPbC3RKOboztLY91F1o'];
+                var fileMetaData = {name:outputFile,parents:parentFolders};
                 google.authorize(JSON.parse(content),(auth)=>{google.uploadFile(auth,outputFile,fileMetaData).catch(console.error)});
             },(err)=>{
                 return console.log('Error Executing Backup:',err);
