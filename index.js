@@ -1,6 +1,6 @@
 const google = require('./googleModule');
 const {exec} = require('child_process');
-const DBFILE = 'databases.json';
+const DBFILE = __dirname + 'databases.json';
 const PASSPHRASE = '1234';
 var parentFolders = ['1BWiXZKWmbidk2RbQVecL8du6Ma2RigtZ'];
 
