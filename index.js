@@ -8,7 +8,7 @@ var parentFolders = ['1BWiXZKWmbidk2RbQVecL8du6Ma2RigtZ'];
 function execBackUpScript(database,passphrase){
   return new Promise((resolve,reject)=>{
     var outputFile = database + '.sql.gpg';
-    var cmd = './mysqlbackup.sh ' + database + ' ' + passphrase;
+    var cmd = __dirname + '/mysqlbackup.sh ' + database + ' ' + passphrase;
     exec(cmd,(err,stdout,stderr)=>{
       if(err) reject(err);
       resolve(outputFile);
