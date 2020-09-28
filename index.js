@@ -33,7 +33,7 @@ function pruneOldBackUps(auth){
   },console.error);
 }
 function cleanup(){
-  exec('rm ' + __dirname + "/*.gpg"',(err,stdout,stderr)=>{
+  exec('rm ' + __dirname + "/*.gpg",(err,stdout,stderr)=>{
     if(err) throw err
   });
 }
