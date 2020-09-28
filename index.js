@@ -1,13 +1,13 @@
 const google = require('./googleModule');
 const {exec} = require('child_process');
-const DBFILE = __dirname + 'databases.json';
+const DBFILE = __dirname + '/databases.json';
 const PASSPHRASE = '1234';
 var parentFolders = ['1BWiXZKWmbidk2RbQVecL8du6Ma2RigtZ'];
 
 
 function execBackUpScript(database,passphrase){
   return new Promise((resolve,reject)=>{
-    var outputFile = database + '.sql.gpg';
+    var outputFile = __dirname + "/" + database + '.sql.gpg';
     var cmd = __dirname + '/mysqlbackup.sh ' + database + ' ' + passphrase;
     exec(cmd,(err,stdout,stderr)=>{
       if(err) reject(err);
