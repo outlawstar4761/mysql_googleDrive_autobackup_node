@@ -32,6 +32,11 @@ function pruneOldBackUps(auth){
     });
   },console.error);
 }
+function cleanup(){
+  exec('rm ' + __dirname + "/*.gpg"',(err,stdout,stderr)=>{
+    if(err) throw err
+  });
+}
 
 let secret = JSON.parse(fs.readFileSync(google.CRED_PATH));
 let databases = JSON.parse(fs.readFileSync(DBFILE));
@@ -43,4 +48,5 @@ google.authorize(secret,(auth)=>{
       google.uploadFile(auth,outputFile,fileMetaData).catch(console.error)
     }).catch(console.error);
   });
+  cleanup()
 });
