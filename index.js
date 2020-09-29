@@ -45,7 +45,7 @@ function cleanup(){
 function backupsExist(){
   let files = fs.readdirSync(BACKPATH);
   for(const file in files){
-    if(path.extname(BACKPATH + file) == '.gpg'){
+    if(path.extname(BACKPATH + files[file]) == '.gpg'){
       return true;
     }
   }
