@@ -43,12 +43,13 @@ function cleanup(){
   });
 }
 function backupsExist(){
-  let fileCount = fs.readdirSync(BACKPATH);
-  fileCount.forEach((file)=>{
+  let files = fs.readdirSync(BACKPATH);
+  for(const file in files){
     if(path.extname(BACKPATH + file) == '.gpg'){
       return true;
     }
-  });
+  }
+  return false;
 }
 //path.extname()
 /*THE ACTION TAKES PLACE HERE*/
