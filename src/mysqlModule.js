@@ -1,6 +1,9 @@
+/*SOMETHING TO KEEP IN MIND HERE: WE ARE RESOLVING STDOUT.
+IF YOUR COMMAND DOESN'T RESULT IN ANY OUTPUT, YOUR ASYNC RETURN WILL BE EMPTY.
+*/
 var mysqlModule = (function(){
   const {exec} = require('child_process');
-  const THISDIR = __dirname + '/';
+  const OUTDIR = __dirname + '/../out/';
 
   let _user = '';
   let _pass = '';
@@ -14,16 +17,16 @@ var mysqlModule = (function(){
       });
     });
   }
-  function _deleteFile(absolutePath){
+  async function _deleteFile(absolutePath){
     let cmd = 'rm ' + absolutePath;
     return _execShellCmd(cmd);
   }
-  function _backupDB(dbName){
+  async function _backupDB(dbName){
     let outFile = THISDIR + dbName + '.sql';
     let cmd = 'mysqldump --user=' + _user + ' --password=' + _pass + ' ' + dbName + ' > ' + outFile;
     return _execShellCmd(cmd);
   }
-  function _encryptOutput(absolutePath,passphrase){
+  async function _encryptOutput(absolutePath,passphrase){
     let cmd = 'gpg -c --batch --passphrase=' + passphrase + ' ' + absolutePath;
     return _execShellCmd(cmd);
   }
@@ -36,13 +39,13 @@ var mysqlModule = (function(){
       this.user = _user;
       this.pass = _pass;
     },
-    backupDB:function(dbname){
+    backupDB:async function(dbname){
       if(this.user == '' || this.pass == ''){
         throw new Error('Unable to execute before setting username and password');
       }
       return _backupDB(dbname);
     },
-    encryptOutput:function(absolutePath,passphrase){
+    encryptOutput:async function(absolutePath,passphrase){
       return _encryptOutput(absolutePath,passphrase);
     }
   }
