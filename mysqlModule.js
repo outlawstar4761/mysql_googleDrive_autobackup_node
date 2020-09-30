@@ -40,7 +40,7 @@ var mysqlModule = (function(){
       if(this.user == '' || this.pass == ''){
         throw new Error('Unable to execute before setting username and password');
       }
-      return _backupDB(dbName);
+      return _backupDB(dbname);
     },
     encryptOutput:function(absolutePath,passphrase){
       return _encryptOutput(absolutePath,passphrase);
