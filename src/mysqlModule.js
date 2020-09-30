@@ -42,7 +42,7 @@ var mysqlModule = (function(){
     return _deleteFile(absolutePath);
   }
   async function _decryptOutput(absolutePath,passphrase){
-    let cmd = 'gpg --yes --batch --passphrase=' + passphrase + ' ' + absolutePath;
+    let cmd = 'gpg --yes --batch --passphrase=' + passphrase + ' ' + absolutePath + ' 2>/dev/null';
     await _execShellCmd(cmd);
     return _deleteFile(absolutePath);
   }
