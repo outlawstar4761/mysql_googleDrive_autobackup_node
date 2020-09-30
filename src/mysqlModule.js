@@ -56,10 +56,10 @@ var mysqlModule = (function(){
       this.pass = _pass;
     },
     getOutPath:function(dbname){
-      _getOutPath(dbname);
+      return _getOutPath(dbname);
     },
     getEncryptedPath:function(dbname){
-      _getEncryptedPath(dbname);
+      return _getEncryptedPath(dbname);
     },
     backupDB:async function(dbname){
       if(this.user == '' || this.pass == ''){
