@@ -17,6 +17,12 @@ var mysqlModule = (function(){
       });
     });
   }
+  function _getOutPath(dbname){
+    return OUTDIR + dbname + '.sql';
+  }
+  function _getEncryptedPath(dbname){
+    return _getOutPath(dbname) + '.gpg';
+  }
   async function _deleteFile(absolutePath){
     let cmd = 'rm ' + absolutePath;
     return _execShellCmd(cmd);
@@ -26,8 +32,17 @@ var mysqlModule = (function(){
     let cmd = 'mysqldump --user=' + _user + ' --password=' + _pass + ' ' + dbname + ' > ' + outFile;
     return _execShellCmd(cmd);
   }
+  async function _restoreDB(dbname,absolutePath){
+    let cmd = 'mysql -u ' + _user + ' -p' + _pass + ' ' + dbname + ' < ' + absolutePath;
+    return _execShellCmd(cmd);
+  }
   async function _encryptOutput(absolutePath,passphrase){
     let cmd = 'gpg -c --batch --passphrase=' + passphrase + ' ' + absolutePath;
+    await _execShellCmd(cmd);
+    return _deleteFile(absolutePath);
+  }
+  async function _decryptOutput(absolutePath,passphrase){
+    let cmd = 'gpg --yes --batch --passphrase=' + passphrase + ' ' + absolutePath;
     await _execShellCmd(cmd);
     return _deleteFile(absolutePath);
   }
@@ -40,6 +55,12 @@ var mysqlModule = (function(){
       this.user = _user;
       this.pass = _pass;
     },
+    getOutPath:function(dbname){
+      _getOutPath(dbname);
+    },
+    getEncryptedPath:function(dbname){
+      _getEncryptedPath(dbname);
+    },
     backupDB:async function(dbname){
       if(this.user == '' || this.pass == ''){
         throw new Error('Unable to execute before setting username and password');
@@ -49,8 +70,11 @@ var mysqlModule = (function(){
     encryptOutput:async function(absolutePath,passphrase){
       return _encryptOutput(absolutePath,passphrase);
     },
-    getOutPath:function(dbname){
-      return OUTDIR + dbname + '.sql';
+    decryptOutput: async function(absolutePath,passphrase){
+      return _decryptOutput(absolutePath,passphrase);
+    },
+    restoreDB: async function(dbname,absolutePath){
+      return _restoreDB(dbname,absolutePath);
     }
   }
 }());
