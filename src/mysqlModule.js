@@ -28,7 +28,8 @@ var mysqlModule = (function(){
   }
   async function _encryptOutput(absolutePath,passphrase){
     let cmd = 'gpg -c --batch --passphrase=' + passphrase + ' ' + absolutePath;
-    return _execShellCmd(cmd);
+    await _execShellCmd(cmd);
+    return _deleteFile(absolutePath);
   }
   return {
     user:_user,
