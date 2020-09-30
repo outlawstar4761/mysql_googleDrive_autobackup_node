@@ -22,7 +22,7 @@ var mysqlModule = (function(){
     return _execShellCmd(cmd);
   }
   async function _backupDB(dbName){
-    let outFile = THISDIR + dbName + '.sql';
+    let outFile = OUTDIR + dbName + '.sql';
     let cmd = 'mysqldump --user=' + _user + ' --password=' + _pass + ' ' + dbName + ' > ' + outFile;
     return _execShellCmd(cmd);
   }
