@@ -9,8 +9,8 @@ var googleModule = (function(){
         'https://www.googleapis.com/auth/drive',
     ];
     const AUTHVER = 'v3';
-    const TOKEN_PATH = 'token.json';
-    const CRED_PATH = 'credentials.json';
+    const TOKEN_PATH = __dirname + '/token.json';
+    const CRED_PATH = __dirname + '/credentials.json';
 
     function authorize(credentials,callback){
         const {client_secret,client_id,redirect_uris} = credentials.installed;
