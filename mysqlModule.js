@@ -20,7 +20,7 @@ var mysqlModule = (function(){
   }
   function _backupDB(dbName){
     let outFile = THISDIR + dbName + '.sql';
-    let cmd = 'mysqldump --user=' + user + ' --password=' + pass + ' ' + dbName + ' > ' + outFile;
+    let cmd = 'mysqldump --user=' + _user + ' --password=' + _pass + ' ' + dbName + ' > ' + outFile;
     return _execShellCmd(cmd);
   }
   function _encryptOutput(absolutePath,passphrase){
