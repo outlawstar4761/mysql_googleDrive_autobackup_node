@@ -67,11 +67,11 @@ var googleModule = (function(){
             const res = await drive.files.create({resource:fileMetaData,media:media});
         },
         downloadFile:async function(auth,fileId,outPath){
+            let dest = fs.createWriteStream(outPath);
             const drive = google.drive({version:AUTHVER,auth});
             const res = await drive.files.get({fileId:fileId,alt:'media'},{responseType:'stream'},(err,res)=>{
-              res.data.on('end',()=>{console.log('done')}).on('err',console.error).pipe(outPath);
+              res.data.on('end',()=>{}).on('err',(err)=>{throw err}).pipe(dest);
             });
-            //.on('end',()=>{console.log('done.')}).on('error',(err)=>{console.log(err)}).pipe(outPath);
         }
     }
 }());
