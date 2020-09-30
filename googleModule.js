@@ -67,7 +67,7 @@ var googleModule = (function(){
             const res = await drive.files.create({resource:fileMetaData,media:media});
         },
         downloadFile:async function(auth,fileId,outPath){
-            const drive = goog.edrive({version:AUTHVER,auth});
+            const drive = google.drive({version:AUTHVER,auth});
             drive.files.get({fileId:fileId,alt:'media'}).pipe(outPath);
         }
     }
