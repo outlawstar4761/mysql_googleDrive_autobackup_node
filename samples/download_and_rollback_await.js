@@ -16,7 +16,12 @@ async function _doDownload(googleAuth,targetDb){
   }
 }
 async function _getDownloadId(googleAuth,targetDb){
-  let files = await google.getFileList();
+  try{
+    let files = await google.getFileList();
+  }catch(err){
+    console.error(err);
+    return null;
+  }
   for(file in files){
     if(files[file].name.match(targetDb)){
       return files[file].id;
