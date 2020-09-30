@@ -21,9 +21,9 @@ var mysqlModule = (function(){
     let cmd = 'rm ' + absolutePath;
     return _execShellCmd(cmd);
   }
-  async function _backupDB(dbName){
-    let outFile = OUTDIR + dbName + '.sql';
-    let cmd = 'mysqldump --user=' + _user + ' --password=' + _pass + ' ' + dbName + ' > ' + outFile;
+  async function _backupDB(dbname){
+    let outFile = OUTDIR + dbname + '.sql';
+    let cmd = 'mysqldump --user=' + _user + ' --password=' + _pass + ' ' + dbname + ' > ' + outFile;
     return _execShellCmd(cmd);
   }
   async function _encryptOutput(absolutePath,passphrase){
@@ -49,7 +49,7 @@ var mysqlModule = (function(){
       return _encryptOutput(absolutePath,passphrase);
     },
     getOutPath:function(dbname){
-      return OUTDIR + dbName + '.sql';
+      return OUTDIR + dbname + '.sql';
     }
   }
 }());
