@@ -26,7 +26,7 @@ async function _getDownloadId(googleAuth,targetDb){
 }
 
 (async ()=>{
-  const secret = JSON.parse(await fs.readFile(google.CRED_PATH));
+  const secret = JSON.parse(fs.readFileSync(google.CRED_PATH));
   sqlmod.setUser(mysqluser,mysqlpass);
   google.authorize(secret,async (auth)=>{
     let targetId = _getDownloadId(auth,targetDb);
