@@ -68,7 +68,10 @@ var googleModule = (function(){
         },
         downloadFile:async function(auth,fileId,outPath){
             const drive = google.drive({version:AUTHVER,auth});
-            const res = await drive.files.get({fileId:fileId,alt:'media'},{responseType:'stream'}).on('end',()=>{console.log('done.')}).on('error',(err)=>{console.log(err)}).pipe(outPath);
+            const res = await drive.files.get({fileId:fileId,alt:'media'},{responseType:'stream'},(err,res)=>{
+              res.data.on('end',()=>{console.log('done')}).on('err',console.error).pipe(outPath);
+            });
+            //.on('end',()=>{console.log('done.')}).on('error',(err)=>{console.log(err)}).pipe(outPath);
         }
     }
 }());
