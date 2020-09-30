@@ -1,4 +1,4 @@
-var mysqlModule = (()=>{
+var mysqlModule = (function(){
   const {exec} = require('child_process');
   const THISDIR = __dirname + '/';
 
@@ -46,4 +46,6 @@ var mysqlModule = (()=>{
       return _encryptOutput(absolutePath,passphrase);
     }
   }
-});
+}());
+
+module.exports = mysqlModule;
