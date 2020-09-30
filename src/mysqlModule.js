@@ -47,6 +47,9 @@ var mysqlModule = (function(){
     },
     encryptOutput:async function(absolutePath,passphrase){
       return _encryptOutput(absolutePath,passphrase);
+    },
+    getOutPath:function(dbname){
+      return OUTDIR + dbName + '.sql';
     }
   }
 }());
