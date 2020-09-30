@@ -8,6 +8,7 @@ var googleModule = (function(){
         'https://www.googleapis.com/auth/userinfo.profile',
         'https://www.googleapis.com/auth/drive',
     ];
+    const AUTHVER = 'v3';
     const TOKEN_PATH = 'token.json';
     const CRED_PATH = 'credentials.json';
 
@@ -45,7 +46,7 @@ var googleModule = (function(){
         getFileList:function(auth,options){
             return new Promise((resolve,reject)=>{
                 var fileList = [];
-                const drive = google.drive({version:'v3',auth});
+                const drive = google.drive({version:AUTHVER,auth});
                 drive.files.list(options,(err,res)=>{
                     if(err) reject(err);
                     const files = res.data.files;
@@ -55,15 +56,19 @@ var googleModule = (function(){
             });
         },
         deleteFile:async function(auth,fileId){
-            const drive = google.drive({version:'v3',auth});
+            const drive = google.drive({version:AUTHVER,auth});
             const res = await drive.files.delete({fileId:fileId});
             return res;
         },
         uploadFile:async function(auth,filePath,fileMetaData){
-            const drive = google.drive({version:'v3',auth});
+            const drive = google.drive({version:AUTHVER,auth});
             var fileInfo = pathinfo(filePath);
             var media = {mimeType:mime.lookup(fileInfo.extname),body:fs.createReadStream(filePath)}
             const res = await drive.files.create({resource:fileMetaData,media:media});
+        },
+        downloadFile:async function(auth,fileId,outPath){
+            const drive = goog.edrive({version:AUTHVER,auth});
+            drive.files.get({fileId:fileId,alt:'media'}).pipe(outPath);
         }
     }
 }());
