@@ -50,9 +50,8 @@ var googleModule = (function(){
             const drive = google.drive({version:AUTHVER,auth});
             let fileList = [];
             let results = await drive.files.list(options);
-            // console.log(results);
-            //const files = results.data.files;
-            //files.forEach((file)=>{fileList.push(file);});
+            const files = results.data.files;
+            files.forEach((file)=>{fileList.push(file);});
             return fileList;
         },
         deleteFile:async function(auth,fileId){
