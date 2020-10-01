@@ -43,34 +43,14 @@ var googleModule = (function(){
         authorize:function(credentials,callback){
             authorize(credentials,callback);
         },
-        getFileList:function(auth,options){
-            return new Promise((resolve,reject)=>{
-                var fileList = [];
-                const drive = google.drive({version:AUTHVER,auth});
-                drive.files.list(options,(err,res)=>{
-                    if(err){
-                      reject(err);
-                      return;
-                    }
-                    const files = res.data.files;
-                    files.forEach((file)=>{fileList.push(file);});
-                    resolve(fileList);
-                });
-            });
+        getFileList:async function(auth,options){
+            const drive = google.drive({version:AUTHVER,auth});
+            let fileList = [];
+            let results = drive.files.list(options);
+            const files = results.data.files;
+            files.forEach((file)=>{fileList.push(file);});
+            return fileList;
         },
-        // getFileList:async function(auth,options){
-        //     const drive = google.drive({version:AUTHVER,auth});
-        //     let fileList = [];
-        //     try{
-        //       let results = drive.files.list(options);
-        //       const files = results.data.files;
-        //     }catch(err){
-        //       throw err;
-        //       return;
-        //     }
-        //     files.forEach((file)=>{fileList.push(file);});
-        //     return fileList;
-        // },
         deleteFile:async function(auth,fileId){
             const drive = google.drive({version:AUTHVER,auth});
             const res = await drive.files.delete({fileId:fileId});
