@@ -4,6 +4,7 @@ let secret = google.getSecret();
 
 (async ()=>{
   google.authorize(secret,(auth)=>{
-    console.log(await google.getFileList());
+    let fileList = google.getFileList();
+    console.log(fileList);
   });
 })();
