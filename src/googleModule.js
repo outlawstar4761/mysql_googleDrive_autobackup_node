@@ -43,6 +43,9 @@ var googleModule = (function(){
         authorize:function(credentials,callback){
             authorize(credentials,callback);
         },
+        getSecret:function(){
+          return JSON.parse(fs.readFileSync(this.CRED_PATH));
+        },
         getFileList:async function(auth,options){
             const drive = google.drive({version:AUTHVER,auth});
             let fileList = [];
