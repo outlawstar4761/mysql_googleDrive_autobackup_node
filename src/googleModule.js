@@ -48,7 +48,10 @@ var googleModule = (function(){
                 var fileList = [];
                 const drive = google.drive({version:AUTHVER,auth});
                 drive.files.list(options,(err,res)=>{
-                    if(err) reject(err);
+                    if(err){
+                      reject(err);
+                      return;
+                    }
                     const files = res.data.files;
                     files.forEach((file)=>{fileList.push(file);});
                     resolve(fileList);
