@@ -20,7 +20,7 @@ async function _prune(googleAuth,targetDb){
 }
 
 let targetDb = 'sample';
-let targetFile = sqlmod.getOutPath(targetDb);
+let targetFile = sqlmod.getEncryptedPath(targetDb);
 let parentFolders = ['1BWiXZKWmbidk2RbQVecL8du6Ma2RigtZ'];
 let fileMetaData = {name:path.basename(targetFile),parents:parentFolders};
 let secret = google.getSecret();
