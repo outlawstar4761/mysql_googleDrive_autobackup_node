@@ -53,7 +53,7 @@ var googleModule = (function(){
               if (err) throw err;
               let files = results.data.files;
               files.forEach((file)=>{fileList.push(file);});
-            };
+            });
             return fileList;
         },
         deleteFile:async function(auth,fileId){
