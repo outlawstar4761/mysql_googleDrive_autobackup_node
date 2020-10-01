@@ -19,12 +19,11 @@ async function _getDownloadId(googleAuth,targetDb){
   try{
     let targetFile = targetDb + '.sql.gpg';
     let fileList = await google.getFileList(googleAuth,{q:"name = '" + targetFile + "'"});
+    return fileList[0].id;
   }catch(err){
     console.error(err);
     return null;
   }
-  return fileList[0].id
-  return null;
 }
 
 (async ()=>{
