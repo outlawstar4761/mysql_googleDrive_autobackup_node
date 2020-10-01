@@ -15,7 +15,7 @@ async function _getDriveId(googleAuth,targetDb){
 async function _prune(googleAuth,targetDb){
   let fileId = await _getDriveId(googleAuth,targetDb).catch(console.error);
   if(fileId !== null){
-    await google.deleteFile(googleAuth,id);
+    await google.deleteFile(googleAuth,fileId);
   }
 }
 
