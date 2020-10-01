@@ -63,11 +63,11 @@ var googleModule = (function(){
             let fileList = [];
             try{
               let results = drive.files.list(options);
+              const files = results.data.files;
             }catch(err){
               throw err;
               return;
             }
-            const files = results.data.files;
             files.forEach((file)=>{fileList.push(file);});
             return fileList;
         },
