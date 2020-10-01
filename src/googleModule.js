@@ -46,7 +46,7 @@ var googleModule = (function(){
         getFileList:async function(auth,options){
             const drive = google.drive({version:AUTHVER,auth});
             let fileList = [];
-            let results = drive.files.list(options);
+            let results = drive.files.list(options).catch((err)=>{throw err; return;});
             const files = results.data.files;
             files.forEach((file)=>{fileList.push(file);});
             return fileList;
