@@ -23,10 +23,11 @@ let targetDb = 'sample';
 let targetFile = sqlmod.getOutPath(targetDb);
 let parentFolders = ['1BWiXZKWmbidk2RbQVecL8du6Ma2RigtZ'];
 let fileMetaData = {name:path.basename(targetFile),parents:parentFolders};
+let secret = google.getSecret();
 
 (async ()=>{
   google.authorize(secret,async (auth)=>{
     await _prune(auth,targetDb);
     await google.uploadFile(auth,targetFile,fileMetaData).catch(console.error);
-  });
+  }).catch(console.error);
 })();
