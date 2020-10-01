@@ -1,4 +1,5 @@
-const google = require('./src/googleModule');
+const path = require('path');
+const google = require('../src/googleModule');
 const sqlmod = require('../src/mysqlModule');
 
 async function _getDriveId(googleAuth,targetDb){
