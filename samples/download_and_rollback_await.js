@@ -18,7 +18,7 @@ async function _doDownload(googleAuth,targetDb){
 async function _getDownloadId(googleAuth,targetDb){
   try{
     let targetFile = targetDb + '.sql.gpg';
-    let fileList = await google.getFileList(auth,{q:"name = '" + targetFile + "'"});
+    let fileList = await google.getFileList(googleAuth,{q:"name = '" + targetFile + "'"});
   }catch(err){
     console.error(err);
     return null;
@@ -31,7 +31,7 @@ async function _getDownloadId(googleAuth,targetDb){
   const secret = google.getSecret();
   sqlmod.setUser(mysqluser,mysqlpass);
   google.authorize(secret,async (auth)=>{
-    let targetId = _getDownloadId(auth,targetDb);
+    let targetId = await _getDownloadId(auth,targetDb);
     console.log(targetId);
     // try{
     //   await google.downloadFile(auth,targetId,sqlmod.getEncryptedPath(targetDb));
