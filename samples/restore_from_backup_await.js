@@ -7,7 +7,7 @@ targetDb = 'sample';
 (async ()=>{
   sqlmod.setUser(mysqluser,mysqlpass);
   try{
-    await sqlmod.restoreDB(targetDb,sqlmod.getOutPath(targetDb))
+    await sqlmod.restoreDB(targetDb,sqlmod.getOutPath(targetDb));
   }catch(err){
     console.error(err);
   }

@@ -7,14 +7,6 @@ const mysqlpass = 'sample';
 const targetDb = 'sample';
 const passphrase = 'sample';
 
-async function _doDownload(googleAuth,targetDb){
-  let dest = sqlmod.getEncryptedPath(targetDb);
-  try{
-    await google.downloadFile();
-  }catch(err){
-    console.error(err);
-  }
-}
 async function _getDownloadId(googleAuth,targetDb){
   try{
     let targetFile = targetDb + '.sql.gpg';
@@ -31,11 +23,8 @@ async function _getDownloadId(googleAuth,targetDb){
   sqlmod.setUser(mysqluser,mysqlpass);
   google.authorize(secret,async (auth)=>{
     let targetId = await _getDownloadId(auth,targetDb);
-    console.log(targetId);
-    // try{
-    //   await google.downloadFile(auth,targetId,sqlmod.getEncryptedPath(targetDb));
-    // }catch(err){
-    //   console.error(err);
-    // }
+    await google.downloadFile(auth,targetId,sqlmod.getEncryptedPath(targetDb)).catch(console.error);
+    await sqlmod.decryptOutput(sqlmod.getEncryptedPath(targetDb),passphrase).catch(console.error);
+    await sqlmod.restoreDB(targetDb,sqlmod.getOutPath(targetDb)).catch(console.error);
   });
 })();
