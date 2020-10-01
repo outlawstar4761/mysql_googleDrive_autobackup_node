@@ -49,9 +49,11 @@ var googleModule = (function(){
         getFileList:async function(auth,options){
             const drive = google.drive({version:AUTHVER,auth});
             let fileList = [];
-            let results = await drive.files.list(options).catch((err)=>{throw err});
-            const files = results.data.files;
-            files.forEach((file)=>{fileList.push(file);});
+            await drive.files.list(options,(err,results)=>{
+              if (err) throw err;
+              let files = results.data.files;
+              files.forEach((file)=>{fileList.push(file);});
+            };
             return fileList;
         },
         deleteFile:async function(auth,fileId){
