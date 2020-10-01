@@ -46,15 +46,20 @@ var googleModule = (function(){
         getSecret:function(){
           return JSON.parse(fs.readFileSync(this.CRED_PATH));
         },
-        getFileList:async function(auth,options){
-            const drive = google.drive({version:AUTHVER,auth});
-            let fileList = [];
-            await drive.files.list(options,(err,results)=>{
-              if (err) throw err;
-              let files = results.data.files;
-              files.forEach((file)=>{fileList.push(file);});
+        getFileList:function(auth,options){
+            return new Promise((resolve,reject)=>{
+                var fileList = [];
+                const drive = google.drive({version:AUTHVER,auth});
+                drive.files.list(options,(err,res)=>{
+                    if(err){
+                      reject(err);
+                      return;
+                    }
+                    const files = res.data.files;
+                    files.forEach((file)=>{fileList.push(file);});
+                    resolve(fileList);
+                });
             });
-            return fileList;
         },
         deleteFile:async function(auth,fileId){
             const drive = google.drive({version:AUTHVER,auth});
