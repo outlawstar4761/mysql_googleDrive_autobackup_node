@@ -4,10 +4,11 @@ IF YOUR COMMAND DOESN'T RESULT IN ANY OUTPUT, YOUR ASYNC RETURN WILL BE EMPTY.
 var mysqlModule = (function(){
   const {exec} = require('child_process');
   const OUTDIR = __dirname + '/../out/';
+  const MYSQLTEST = 'mysql --help | head -n 1';
+  const GPGTEST = 'gpg --help | head -n 1';
 
   let _user = '';
   let _pass = '';
-
   function _execShellCmd(cmd){
     return new Promise((resolve,reject)=>{
       exec(cmd,(err,stdout,stderr)=>{
@@ -16,6 +17,24 @@ var mysqlModule = (function(){
         resolve(stdout);
       });
     });
+  }
+  async function _testMysql(){
+    let cmd = MYSQLTEST;
+    try{
+      let stdout = await _execShellCmd(cmd);
+    }catch(err){
+      throw err;
+    }
+    return stdout;
+  }
+  async function _testGpg(){
+    let cmd = GPGTEST;
+    try{
+      let stdout = await _execShellCmd(cmd);
+    }catch(err){
+      throw err;
+    }
+    return stdout;
   }
   function _getOutPath(dbname){
     return OUTDIR + dbname + '.sql';
@@ -49,6 +68,11 @@ var mysqlModule = (function(){
   return {
     user:_user,
     pass:_pass,
+    testShellAccess:async function(){
+      let mystdout = await _testMysql();
+      let gpstdout = await _testGpg();
+      return {'mysql':mystdout,'gpg':gpstdout};
+    },
     setUser:function(user,pass){
       _user = user;
       _pass = pass;
