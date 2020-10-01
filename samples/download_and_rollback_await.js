@@ -26,7 +26,9 @@ async function _getDownloadId(googleAuth,targetDb){
     if(targetId !== null){
       await google.downloadFile(auth,targetId,sqlmod.getEncryptedPath(targetDb)).catch(console.error);
       await sqlmod.decryptOutput(sqlmod.getEncryptedPath(targetDb),passphrase).catch(console.error);
-      await sqlmod.restoreDB(targetDb,sqlmod.getOutPath(targetDb)).catch(console.error);  
+      await sqlmod.restoreDB(targetDb,sqlmod.getOutPath(targetDb)).catch(console.error);
+    }else{
+      console.log('Unable to find a backup for ' + targetDb);
     }
   });
 })();
