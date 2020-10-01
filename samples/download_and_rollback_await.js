@@ -17,16 +17,13 @@ async function _doDownload(googleAuth,targetDb){
 }
 async function _getDownloadId(googleAuth,targetDb){
   try{
-    let files = await google.getFileList();
+    let targetFile = targetDb + '.sql.gpg';
+    let fileList = await google.getFileList(auth,{q:"name = '" + targetFile + "'"});
   }catch(err){
     console.error(err);
     return null;
   }
-  for(file in files){
-    if(files[file].name.match(targetDb)){
-      return files[file].id;
-    }
-  }
+  return fileList[0].id
   return null;
 }
 
@@ -35,10 +32,11 @@ async function _getDownloadId(googleAuth,targetDb){
   sqlmod.setUser(mysqluser,mysqlpass);
   google.authorize(secret,async (auth)=>{
     let targetId = _getDownloadId(auth,targetDb);
-    try{
-      await google.downloadFile(auth,targetId,sqlmod.getEncryptedPath(targetDb));
-    }catch(err){
-      console.error(err);
-    }
+    console.log(targetId);
+    // try{
+    //   await google.downloadFile(auth,targetId,sqlmod.getEncryptedPath(targetDb));
+    // }catch(err){
+    //   console.error(err);
+    // }
   });
 })();
