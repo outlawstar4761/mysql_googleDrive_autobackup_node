@@ -20,19 +20,23 @@ var mysqlModule = (function(){
   }
   async function _testMysql(){
     let cmd = MYSQLTEST;
+    let stdout = '';
     try{
-      let stdout = await _execShellCmd(cmd);
+      stdout = await _execShellCmd(cmd);
     }catch(err){
       throw err;
+      return;
     }
     return stdout;
   }
   async function _testGpg(){
     let cmd = GPGTEST;
+    let stdout = '';
     try{
-      let stdout = await _execShellCmd(cmd);
+      stdout = await _execShellCmd(cmd);
     }catch(err){
       throw err;
+      return;
     }
     return stdout;
   }
