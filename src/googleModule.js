@@ -76,7 +76,7 @@ var googleModule = (function(){
             let dest = fs.createWriteStream(outPath);
             const drive = google.drive({version:AUTHVER,auth});
             const res = await drive.files.get({fileId:fileId,alt:'media'},{responseType:'stream'},(err,res)=>{
-              res.data.on('end',()=>{}).on('err',(err)=>{throw err}).pipe(dest);
+              res.data.on('end',()=>{}).on('err',(err)=>{throw err}).pipe(dest).on('finish',()=>{console.log('Download Complete.')});
             });
         }
     }
