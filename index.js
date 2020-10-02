@@ -44,10 +44,13 @@ function backupsExist(){
 /*THE ACTION TAKES PLACE HERE*/
 
 (async ()=>{
+  let myuser = 'root';
+  let mypass = 'sample';
   let secret = google.getSecret();
   let databases = JSON.parse(fs.readFileSync(DBFILE));
+  sqlmod.setUser(myuser,mypass);
   if(backupsExist()){
-    cleanup()
+    cleanup();
   }
   google.authorize(secret,async (auth)=>{
     pruneOldBackUps(auth);
