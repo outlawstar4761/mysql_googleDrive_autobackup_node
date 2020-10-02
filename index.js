@@ -1,24 +1,14 @@
 const google = require('./src/googleModule');
-const {exec} = require('child_process');
+const sqlmod = require('./src/mysqlModule');
 const path = require('path');
 const fs = require('fs');
+const {exec} = require('child_process');
 const DBFILE = __dirname + '/config/databases.json';
-const BACKPATH = __dirname + "/"
-const PASSPHRASE = '1234';
+const BACKPATH = __dirname + "/out/"
+const PASSPHRASE = 'sample';
 var parentFolders = ['1BWiXZKWmbidk2RbQVecL8du6Ma2RigtZ'];
 
 
-function execBackUpScript(database,passphrase){
-  return new Promise((resolve,reject)=>{
-    var outputFile = __dirname + "/" + database + '.sql.gpg';
-    var cmd = __dirname + '/mysqlbackup.sh ' + database + ' ' + passphrase;
-    exec(cmd,(err,stdout,stderr)=>{
-      if(err) reject(err);
-      if(stderr) console.error(stderr);
-      resolve(outputFile);
-    });
-  });
-}
 function parseExistingBackups(fileList){
   let ids = [];
   fileList.forEach((file)=>{
@@ -37,7 +27,7 @@ function pruneOldBackUps(auth){
   },console.error);
 }
 function cleanup(){
-  exec('rm ' + __dirname + "/*.gpg",(err,stdout,stderr)=>{
+  exec('rm ' + BACKPATH + "*.gpg",(err,stdout,stderr)=>{
     if(err) throw err
     if(stderr) console.error(stderr);
   });
@@ -51,19 +41,21 @@ function backupsExist(){
   }
   return false;
 }
-//path.extname()
 /*THE ACTION TAKES PLACE HERE*/
-if(backupsExist()){
-  cleanup()
-}
-let secret = JSON.parse(fs.readFileSync(google.CRED_PATH));
-let databases = JSON.parse(fs.readFileSync(DBFILE));
-google.authorize(secret,(auth)=>{
-  pruneOldBackUps(auth);
-  databases.forEach((database)=>{
-    execBackUpScript(database,PASSPHRASE).then((outputFile)=>{
-      var fileMetaData = {name:path.basename(outputFile),parents:parentFolders};
+
+(async ()=>{
+  let secret = google.getSecret();
+  let databases = JSON.parse(fs.readFileSync(DBFILE));
+  if(backupsExist()){
+    cleanup()
+  }
+  google.authorize(secret,async (auth)=>{
+    pruneOldBackUps(auth);
+    databases.forEach(async (database)=>{
+      await sqlmod.backupDB(database);
+      await sqlmod.encryptOutput(sqlmod.getOutPath(database));
+      let fileMetaData = {name:path.basename(sqlmod.getOutPath(database)),parents:parentFolders};
       google.uploadFile(auth,outputFile,fileMetaData).catch(console.error)
-    }).catch(console.error);
+    });
   });
-});
+})();
