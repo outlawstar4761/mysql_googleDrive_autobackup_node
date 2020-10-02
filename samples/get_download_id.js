@@ -1,6 +1,7 @@
 const google = require('../src/googleModule');
 
 let targetDb = 'sample';
+let secret = google.getSecret();
 
 async function _getDriveId(googleAuth,targetDb){
   let targetFile = targetDb + '.sql.gpg';
