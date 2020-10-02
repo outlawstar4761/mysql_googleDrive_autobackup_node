@@ -72,13 +72,26 @@ var googleModule = (function(){
             var media = {mimeType:mime.lookup(fileInfo.extname),body:fs.createReadStream(filePath)}
             const res = await drive.files.create({resource:fileMetaData,media:media});
         },
-        downloadFile:async function(auth,fileId,outPath){
-            let dest = fs.createWriteStream(outPath);
-            const drive = google.drive({version:AUTHVER,auth});
-            const res = await drive.files.get({fileId:fileId,alt:'media'},{responseType:'stream'},(err,res)=>{
-              res.data.on('end',()=>{}).on('err',(err)=>{throw err}).pipe(dest).on('finish',()=>{console.log('Download Complete.')});
+        downloadFile:function(auth,fileId,outPath){
+            return new Promise((resolve,reject)=>{
+              let dest = fs.createWriteStream(outPath);
+              const drive = google.drive({version:AUTHVER,auth});
+              drive.files.get({fileId:fileId,alt:'media'},{responseType:'stream'},(err,res)=>{
+                res.data.on('end',()=>{}).on('err',(err)=>{
+                  reject(err);
+                }).pipe(dest).on('finish',()=>{
+                  resolve();
+                });
+              });
             });
         }
+        // downloadFile:async function(auth,fileId,outPath){
+        //     let dest = fs.createWriteStream(outPath);
+        //     const drive = google.drive({version:AUTHVER,auth});
+        //     const res = await drive.files.get({fileId:fileId,alt:'media'},{responseType:'stream'},(err,res)=>{
+        //       res.data.on('end',()=>{}).on('err',(err)=>{throw err}).pipe(dest).on('finish',()=>{console.log('Download Complete.')});
+        //     });
+        // }
     }
 }());
 
