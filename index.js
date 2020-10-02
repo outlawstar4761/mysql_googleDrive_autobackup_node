@@ -55,7 +55,7 @@ function backupsExist(){
       await sqlmod.backupDB(database);
       await sqlmod.encryptOutput(sqlmod.getOutPath(database));
       let fileMetaData = {name:path.basename(sqlmod.getOutPath(database)),parents:parentFolders};
-      google.uploadFile(auth,outputFile,fileMetaData).catch(console.error)
+      google.uploadFile(auth,sqlmod.getOutPath(database),fileMetaData).catch(console.error)
     });
   });
 })();
