@@ -3,7 +3,7 @@ var googleModule = (function(){
     const readline = require('readline');
     const {google} = require('googleapis');
     const mime = require('mime-types');
-    const pathinfo = require('pathinfo');
+    //const pathinfo = require('pathinfo');
     const SCOPES = [
         'https://www.googleapis.com/auth/userinfo.profile',
         'https://www.googleapis.com/auth/drive',
@@ -68,8 +68,8 @@ var googleModule = (function(){
         },
         uploadFile:async function(auth,filePath,fileMetaData){
             const drive = google.drive({version:AUTHVER,auth});
-            var fileInfo = pathinfo(filePath);
-            var media = {mimeType:mime.lookup(fileInfo.extname),body:fs.createReadStream(filePath)}
+            var ext = path.extname(filePath);
+            var media = {mimeType:mime.lookup(ext),body:fs.createReadStream(filePath)}
             const res = await drive.files.create({resource:fileMetaData,media:media});
         },
         downloadFile:function(auth,fileId,outPath){
@@ -85,13 +85,6 @@ var googleModule = (function(){
               });
             });
         }
-        // downloadFile:async function(auth,fileId,outPath){
-        //     let dest = fs.createWriteStream(outPath);
-        //     const drive = google.drive({version:AUTHVER,auth});
-        //     const res = await drive.files.get({fileId:fileId,alt:'media'},{responseType:'stream'},(err,res)=>{
-        //       res.data.on('end',()=>{}).on('err',(err)=>{throw err}).pipe(dest).on('finish',()=>{console.log('Download Complete.')});
-        //     });
-        // }
     }
 }());
 

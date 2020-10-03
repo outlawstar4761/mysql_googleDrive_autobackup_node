@@ -7,9 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "googleapis": "^27.0.0",
-    "mime-types": "^2.1.19",
-    "pathinfo": "^0.1.0"
+    "googleapis": "^60.0.1",
+    "mime-types": "^2.1.19"
   },
   "author": "",
   "license": "ISC"
