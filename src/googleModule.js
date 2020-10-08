@@ -3,7 +3,7 @@ var googleModule = (function(){
     const readline = require('readline');
     const {google} = require('googleapis');
     const mime = require('mime-types');
-    //const pathinfo = require('pathinfo');
+    const path = require('path');
     const SCOPES = [
         'https://www.googleapis.com/auth/userinfo.profile',
         'https://www.googleapis.com/auth/drive',
