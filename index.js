@@ -56,9 +56,12 @@ function backupsExist(){
     pruneOldBackUps(auth);
     databases.forEach(async (database)=>{
       await sqlmod.backupDB(database);
+      console.log('Backed up ' + database + '...');
       await sqlmod.encryptOutput(sqlmod.getOutPath(database),PASSPHRASE);
+      console.log('Encrypted ' + database + '...');
       let fileMetaData = {name:path.basename(sqlmod.getEncryptedPath(database)),parents:parentFolders};
-      google.uploadFile(auth,sqlmod.getEncryptedPath(database),fileMetaData).catch(console.error)
+      await google.uploadFile(auth,sqlmod.getEncryptedPath(database),fileMetaData).catch(console.error)
+      console.log('Uploaded ' + path.basename(sqlmod.getEncryptedPath(database)) + ' to GoogleDrive.');
     });
   });
 })();
