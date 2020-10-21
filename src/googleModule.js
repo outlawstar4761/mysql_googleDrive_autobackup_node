@@ -63,7 +63,7 @@ var googleModule = (function(){
         },
         deleteFile:async function(auth,fileId){
             const drive = google.drive({version:AUTHVER,auth});
-            const res = await drive.files.delete({fileId:fileId});
+            const res = await drive.files.delete({fileId:fileId}).catch((err)=>{throw err; return});
             return res;
         },
         uploadFile:async function(auth,filePath,fileMetaData){
