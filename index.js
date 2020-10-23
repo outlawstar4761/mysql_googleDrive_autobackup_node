@@ -57,7 +57,7 @@ function backupsExist(){
     databases.forEach(async (database)=>{
       await sqlmod.backupDB(database);
       console.log('Backed up ' + database + '...');
-      await sqlmod.encryptOutput(sqlmod.getOutPath(database),PASSPHRASE);
+      await sqlmod.encryptOutput(sqlmod.getOutPath(database),PASSPHRASE).catch(console.error);
       console.log('Encrypted ' + database + '...');
       let fileMetaData = {name:path.basename(sqlmod.getEncryptedPath(database)),parents:parentFolders};
       await google.uploadFile(auth,sqlmod.getEncryptedPath(database),fileMetaData).catch(console.error)
