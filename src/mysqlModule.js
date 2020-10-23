@@ -96,7 +96,7 @@ var mysqlModule = (function(){
       return _backupDB(dbname);
     },
     encryptOutput:async function(absolutePath,passphrase){
-      return _encryptOutput(absolutePath,passphrase);
+      return await _encryptOutput(absolutePath,passphrase);
     },
     decryptOutput: async function(absolutePath,passphrase){
       return _decryptOutput(absolutePath,passphrase);
