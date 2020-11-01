@@ -18,14 +18,21 @@ function parseExistingBackups(fileList){
   });
   return ids;
 }
-function pruneOldBackUps(auth){
-  google.getFileList(auth,{}).then((fileList)=>{
-    let backupIds = parseExistingBackups(fileList);
-    backupIds.forEach(async (id)=>{
-      await google.deleteFile(auth,id).catch(console.error);
-    });
-  },console.error);
+async function pruneOldBackUps(auth){
+  let fileList = await google.getFileList(auth,{}).catch((err)=>{throw err; return});
+  let backupIds = parseExistingBackups(fileList);
+  backupIds.forEach(async (id)=>{
+    await google.deleteFile(auth,id).catch((err)=>{throw err; return});
+  });
 }
+// function pruneOldBackUps(auth){
+//   google.getFileList(auth,{}).then((fileList)=>{
+//     let backupIds = parseExistingBackups(fileList);
+//     backupIds.forEach(async (id)=>{
+//       await google.deleteFile(auth,id).catch(console.error);
+//     });
+//   },console.error);
+// }
 function cleanup(){
   exec('rm ' + BACKPATH + "*.gpg",(err,stdout,stderr)=>{
     if(err) throw err
@@ -53,7 +60,7 @@ function backupsExist(){
     cleanup();
   }
   google.authorize(secret,async (auth)=>{
-    pruneOldBackUps(auth);
+    await pruneOldBackUps(auth).catch(console.error);
     databases.forEach(async (database)=>{
       await sqlmod.backupDB(database);
       console.log('Backed up ' + database + '...');
