@@ -21,9 +21,9 @@ function parseExistingBackups(fileList){
 async function pruneOldBackUps(auth){
   let fileList = await google.getFileList(auth,{}).catch((err)=>{throw err; return});
   let backupIds = parseExistingBackups(fileList);
-  backupIds.forEach(async (id)=>{
-    await google.deleteFile(auth,id).catch((err)=>{throw err; return});
-  });
+  for(i in backupIds){
+    await google.deleteFile(auth,backupIds[i]).catch((err)=>{throw err; return});
+  }
 }
 // function pruneOldBackUps(auth){
 //   google.getFileList(auth,{}).then((fileList)=>{
