@@ -22,7 +22,7 @@ function pruneOldBackUps(auth){
   google.getFileList(auth,{}).then((fileList)=>{
     let backupIds = parseExistingBackups(fileList);
     backupIds.forEach(async (id)=>{
-      await google.deleteFile(auth,id);
+      await google.deleteFile(auth,id).catch(console.error);
     });
   },console.error);
 }
