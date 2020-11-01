@@ -25,14 +25,6 @@ async function pruneOldBackUps(auth){
     await google.deleteFile(auth,backupIds[i]).catch((err)=>{throw err; return});
   }
 }
-// function pruneOldBackUps(auth){
-//   google.getFileList(auth,{}).then((fileList)=>{
-//     let backupIds = parseExistingBackups(fileList);
-//     backupIds.forEach(async (id)=>{
-//       await google.deleteFile(auth,id).catch(console.error);
-//     });
-//   },console.error);
-// }
 function cleanup(){
   exec('rm ' + BACKPATH + "*.gpg",(err,stdout,stderr)=>{
     if(err) throw err
