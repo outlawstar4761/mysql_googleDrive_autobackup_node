@@ -51,16 +51,15 @@ function backupsExist(){
   if(backupsExist()){
     cleanup();
   }
-  google.authorize(secret,async (auth)=>{
-    await pruneOldBackUps(auth).catch(console.error);
-    databases.forEach(async (database)=>{
-      await sqlmod.backupDB(database);
-      console.log('Backed up ' + database + '...');
-      await sqlmod.encryptOutput(sqlmod.getOutPath(database),PASSPHRASE).catch(console.error);
-      console.log('Encrypted ' + database + '...');
-      let fileMetaData = {name:path.basename(sqlmod.getEncryptedPath(database)),parents:parentFolders};
-      await google.uploadFile(auth,sqlmod.getEncryptedPath(database),fileMetaData).catch(console.error)
-      console.log('Uploaded ' + path.basename(sqlmod.getEncryptedPath(database)) + ' to GoogleDrive.');
-    });
+  let auth = google.authorize(__dirname + '/config/autobackups-1533129260452-637dd11cdc99.json',['https://www.googleapis.com/auth/drive']);
+  await pruneOldBackUps(auth).catch(console.error);
+  databases.forEach(async (database)=>{
+    await sqlmod.backupDB(database);
+    console.log('Backed up ' + database + '...');
+    await sqlmod.encryptOutput(sqlmod.getOutPath(database),PASSPHRASE).catch(console.error);
+    console.log('Encrypted ' + database + '...');
+    let fileMetaData = {name:path.basename(sqlmod.getEncryptedPath(database)),parents:parentFolders};
+    await google.uploadFile(auth,sqlmod.getEncryptedPath(database),fileMetaData).catch(console.error)
+    console.log('Uploaded ' + path.basename(sqlmod.getEncryptedPath(database)) + ' to GoogleDrive.');
   });
 })();
