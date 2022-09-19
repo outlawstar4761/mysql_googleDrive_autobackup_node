@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const {exec} = require('child_process');
 const DBFILE = __dirname + '/config/databases.json';
+const CREDS = require(__dirname + '/config/creds');
 const BACKPATH = __dirname + "/out/"
 const PASSPHRASE = 'sample';
 var parentFolders = ['1BWiXZKWmbidk2RbQVecL8du6Ma2RigtZ'];
@@ -43,9 +44,8 @@ function backupsExist(){
 /*THE ACTION TAKES PLACE HERE*/
 
 (async ()=>{
-  let myuser = 'root';
-  let mypass = 'sample';
-  let secret = google.getSecret();
+  let myuser = CREDS.username;
+  let mypass = CREDS.password;
   let databases = JSON.parse(fs.readFileSync(DBFILE));
   sqlmod.setUser(myuser,mypass);
   if(backupsExist()){
