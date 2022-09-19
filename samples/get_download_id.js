@@ -1,7 +1,6 @@
 const google = require('../src/googleModule');
 
 let targetDb = 'sample';
-let secret = google.getSecret();
 
 async function _getDriveId(googleAuth,targetDb){
   let targetFile = targetDb + '.sql.gpg';
@@ -15,8 +14,7 @@ async function _getDriveId(googleAuth,targetDb){
 }
 
 (async ()=>{
-  google.authorize(secret,async (auth)=>{
-    let targetId = await _getDriveId(auth,targetDb);
-    console.log(targetId);
-  });
+  let auth = google.authorize(__dirname + '/../config/autobackups-1533129260452-637dd11cdc99.json',['https://www.googleapis.com/auth/drive']);
+  let targetId = await _getDriveId(auth,targetDb);
+  console.log(targetId);
 })();

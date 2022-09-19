@@ -19,16 +19,14 @@ async function _getDownloadId(googleAuth,targetDb){
 }
 
 (async ()=>{
-  const secret = google.getSecret();
   sqlmod.setUser(mysqluser,mysqlpass);
-  google.authorize(secret,async (auth)=>{
-    let targetId = await _getDownloadId(auth,targetDb);
-    if(targetId !== null){
-      await google.downloadFile(auth,targetId,sqlmod.getEncryptedPath(targetDb)).catch(console.error);
-      await sqlmod.decryptOutput(sqlmod.getEncryptedPath(targetDb),passphrase).catch(console.error);
-      await sqlmod.restoreDB(targetDb,sqlmod.getOutPath(targetDb)).catch(console.error);
-    }else{
-      console.log('Unable to find a backup for ' + targetDb);
-    }
-  });
+  let auth = google.authorize(__dirname + '/../config/autobackups-1533129260452-637dd11cdc99.json',['https://www.googleapis.com/auth/drive']);
+  let targetId = await _getDownloadId(auth,targetDb);
+  if(targetId !== null){
+    await google.downloadFile(auth,targetId,sqlmod.getEncryptedPath(targetDb)).catch(console.error);
+    await sqlmod.decryptOutput(sqlmod.getEncryptedPath(targetDb),passphrase).catch(console.error);
+    await sqlmod.restoreDB(targetDb,sqlmod.getOutPath(targetDb)).catch(console.error);
+  }else{
+    console.log('Unable to find a backup for ' + targetDb);
+  }
 })();

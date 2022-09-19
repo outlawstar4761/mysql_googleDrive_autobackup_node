@@ -3,10 +3,9 @@ const sqlmod = require('./src/mysqlModule');
 const path = require('path');
 const fs = require('fs');
 const {exec} = require('child_process');
+const CREDS = require('./config/creds');
 const DBFILE = __dirname + '/config/databases.json';
-const CREDS = require(__dirname + '/config/creds');
 const BACKPATH = __dirname + "/out/"
-const PASSPHRASE = 'sample';
 var parentFolders = ['1BWiXZKWmbidk2RbQVecL8du6Ma2RigtZ'];
 
 
@@ -54,12 +53,27 @@ function backupsExist(){
   let auth = google.authorize(__dirname + '/config/autobackups-1533129260452-637dd11cdc99.json',['https://www.googleapis.com/auth/drive']);
   await pruneOldBackUps(auth).catch(console.error);
   databases.forEach(async (database)=>{
-    await sqlmod.backupDB(database);
-    console.log('Backed up ' + database + '...');
-    await sqlmod.encryptOutput(sqlmod.getOutPath(database),PASSPHRASE).catch(console.error);
-    console.log('Encrypted ' + database + '...');
-    let fileMetaData = {name:path.basename(sqlmod.getEncryptedPath(database)),parents:parentFolders};
-    await google.uploadFile(auth,sqlmod.getEncryptedPath(database),fileMetaData).catch(console.error)
-    console.log('Uploaded ' + path.basename(sqlmod.getEncryptedPath(database)) + ' to GoogleDrive.');
+    try{
+      await sqlmod.backupDB(database);
+      console.log('Backed up ' + database + '...');
+    }catch(err){
+      console.error(err);
+      return;
+    }
+    try{
+      await sqlmod.encryptOutput(sqlmod.getOutPath(database),CREDS.encryptionPhrase).catch(console.error);
+      console.log('Encrypted ' + database + '...');
+    }catch(err){
+      console.error(err);
+      return;
+    }
+    try{
+      let fileMetaData = {name:path.basename(sqlmod.getEncryptedPath(database)),parents:parentFolders};
+      await google.uploadFile(auth,sqlmod.getEncryptedPath(database),fileMetaData).catch(console.error)
+      console.log('Uploaded ' + path.basename(sqlmod.getEncryptedPath(database)) + ' to GoogleDrive.');
+    }catch(err){
+      console.error(err);
+      return;
+    }
   });
 })();
