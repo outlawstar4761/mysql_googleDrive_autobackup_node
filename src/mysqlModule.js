@@ -52,7 +52,7 @@ var mysqlModule = (function(){
   }
   async function _backupDB(dbname){
     let outFile = OUTDIR + dbname + '.sql';
-    let cmd = 'mysqldump --user=' + _user + ' --password=' + _pass + ' ' + dbname + ' > ' + outFile;
+    let cmd = 'mysqldump --routines --user=' + _user + ' --password=' + _pass + ' ' + dbname + ' > ' + outFile;
     return _execShellCmd(cmd);
   }
   async function _restoreDB(dbname,absolutePath){
